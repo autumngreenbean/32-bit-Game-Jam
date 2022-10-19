@@ -72,3 +72,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 .DS_Store
 .vscode/settings.json
+32-bit-Game-Jam.code-workspace
