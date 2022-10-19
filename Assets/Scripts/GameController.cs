@@ -69,4 +69,9 @@ public class GameController : MonoBehaviour
         lastCheckpoint.Respawn(player);
         return;
     }
+    
+    public Vector3 GetPlayerLocation()
+    {
+        return playerObj.transform.position;
+    }
 }
