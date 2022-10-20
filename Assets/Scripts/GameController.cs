@@ -70,6 +70,9 @@ public class GameController : MonoBehaviour
         return;
     }
     
+    /// <summary>
+    /// Get the current player location.
+    /// </summary>
     public Vector3 GetPlayerLocation()
     {
         return playerObj.transform.position;

@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Turns GameObject into checkpoint when attached with Collider and Transform. Will overwrite other collision behavior. 
 /// </summary>
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(Transform))]
 public class Checkpoint : MonoBehaviour
 {
