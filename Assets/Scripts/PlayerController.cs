@@ -21,4 +21,9 @@ public class PlayerController : MonoBehaviour
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         position = Vector3.Lerp(transform.position, mousePosition, moveSpeed);
     }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(position);
+    }
 }
