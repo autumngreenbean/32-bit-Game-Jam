@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enviroment : MonoBehaviour
+public class Environment : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] WorldController.EnviromentLayers layer; 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void Awake() {
+
+        Transform transform = gameObject.transform;
+        // transform.position = new Vector3(transform.position.x, transform.position.y, WorldController.G     
     }
 }

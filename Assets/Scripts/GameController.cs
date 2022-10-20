@@ -8,6 +8,8 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public static GameController instance { get; private set; }
+    
+    public WorldController worldController;
 
     // Default spawn location, must have a checkpoint component
     [SerializeField] GameObject spawnObj;
@@ -34,6 +36,9 @@ public class GameController : MonoBehaviour
 
         // set default spawn
         lastCheckpoint = spawnObj.GetComponent<Checkpoint>();
+
+        // Get the world controller
+        worldController = gameObject.GetComponent<WorldController>();
     }
 
     /// <summary>
