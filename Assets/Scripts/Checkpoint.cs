@@ -39,11 +39,8 @@ public class Checkpoint : MonoBehaviour
         activated = true;
     }
 
-    /// <summary>
-    /// Handles respawn of player at checkpoint location. 
-    /// </summary>
-    public void Respawn(PlayerController player)
+    public Vector3 GetLocation()
     {
-        player.gameObject.transform.position = location;
+        return location;
     }
 }

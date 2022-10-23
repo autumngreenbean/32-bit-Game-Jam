@@ -7,79 +7,77 @@ using UnityEngine;
 /// </summary>
 public class GameController : MonoBehaviour
 {
+    // Should only have one GameController in the scene. (singleton class)
     public static GameController instance { get; private set; }
     
     public WorldController worldController;
 
-    // Default spawn location, must have a checkpoint component
-    [SerializeField] GameObject spawnObj;
-
-    // Checkpoint
-    private Checkpoint lastCheckpoint;
-
     // Player
-    [SerializeField] GameObject playerObj;
-    PlayerController player;
-    private int playerHealth = 100;
-    // private int playerStamina = 100; commented for now to avoid compiler warning
+    [SerializeField] int playerMaxHealth = 100;
+    [SerializeField] float playerBaseSpeed = 0.1f;
+    [SerializeField] float playerSprintMultiplier = 0.1f;
+    [SerializeField] float playerMaxStamina = 100f;
+    [SerializeField] float playerStaminaDrainRate = 1f;
+    [SerializeField] float playerStaminaRechargeRate = 1f;
+
+    // Camera
+    [SerializeField] float cameraBaseSpeed = 0.1f;
+    [SerializeField] float cameraPlayerMinMultiplier = 0.2f;
+    [SerializeField] float cameraPlayerMaxMultiplier = 1.2f;
 
     private void Awake()
     {
-        // Should only have one GameController in the scene. (singleton class)
         if (instance != null)
         {
             Debug.LogError("Found more than one Game Controller in the scene.");
         }
         instance = this;
         
-        player = playerObj.GetComponent<PlayerController>();
-
-        // set default spawn
-        lastCheckpoint = spawnObj.GetComponent<Checkpoint>();
-
-        // Get the world controller
         worldController = gameObject.GetComponent<WorldController>();
     }
 
-    /// <summary>
-    /// Called when player collides with a checkpoint or enemy.
-    /// </summary>
-    public void OnPlayerCollision(GameObject other)
+    public float GetPlayerSpeed()
     {
-        if (other.GetComponent<Checkpoint>())
-        {
-            Checkpoint point = other.GetComponent<Checkpoint>();
-            if (!point.IsActivated()) 
-            {
-                lastCheckpoint = point;
-                point.Activate();
-            }
-        }
-        if (other.GetComponent<EnemyController>())
-        {
-            EnemyController enemy = other.GetComponent<EnemyController>();
-            // playerHealth -= enemy.attack;
-            if (playerHealth <= 0)
-            {
-                OnPlayerDeath();
-            } 
-        }
-    } 
-
-    /// <summary>
-    /// Called when player's health falls below zero.
-    /// </summary>
-    public void OnPlayerDeath()
-    {
-        lastCheckpoint.Respawn(player);
-        return;
+        return playerBaseSpeed;
     }
-    
-    /// <summary>
-    /// Get the current player location.
-    /// </summary>
-    public Vector3 GetPlayerLocation()
+
+    public float GetCameraBaseSpeed()
     {
-        return playerObj.transform.position;
+        return cameraBaseSpeed;
+    }
+
+    public float GetPlayerSprintMultiplier()
+    {
+        return playerSprintMultiplier;
+    }
+
+    public float GetCameraMinPlayerMultipier()
+    {
+        return cameraPlayerMinMultiplier;
+    }
+
+    public float GetCameraMaxPlayerMultipier()
+    {
+        return cameraPlayerMaxMultiplier;
+    }
+
+    public int GetPlayerMaxHealth()
+    {
+        return playerMaxHealth;
+    }
+
+    public float GetPlayerMaxStamina()
+    {
+        return playerMaxStamina;
+    }
+
+    public float GetPlayerStaminaRechargeRate()
+    {
+        return playerStaminaRechargeRate;
+    }
+
+    public float GetPlayerStaminaDrainRate()
+    {
+        return playerStaminaDrainRate;
     }
 }
