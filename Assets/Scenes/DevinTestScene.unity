@@ -329,8 +329,8 @@ MonoBehaviour:
   playerStaminaDrainRate: 1
   playerStaminaRechargeRate: 1
   cameraBaseSpeed: 1
-  cameraPlayerMinMultiplier: 0.5
-  cameraPlayerMaxMultiplier: 1.5
+  cameraPlayerMinMultiplier: 0.3
+  cameraPlayerMaxMultiplier: 1.8
 --- !u!4 &522669724
 Transform:
   m_ObjectHideFlags: 0
