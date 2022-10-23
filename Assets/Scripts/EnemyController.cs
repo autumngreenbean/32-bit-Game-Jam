@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour
         faceAt = player.transform.position - transform.position;
 
         //attack range
-        if (faceAt.magnitude <= 1)
+        if (faceAt.magnitude <= 17)
             transform.Translate(speed * Time.deltaTime * faceAt, Space.World);
 
     }
