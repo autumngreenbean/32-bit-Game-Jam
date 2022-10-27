@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameUIController : MonoBehaviour
 {
@@ -37,12 +38,12 @@ public class InGameUIController : MonoBehaviour
 
       void OnCollisionEnter(Collision col) {
 
-          if (col.gameObject.tag == "Urchin" & health_image.sprite = health_sprite_1) {
+          if (col.gameObject.tag == "Urchin" && health_image.sprite == health_sprite_1) {
 
               health_image.sprite = health_sprite_2;
           }
 
-          if (col.gameObject.tag == "Urchin" & health_image.sprite = health_sprite_2) {
+          if (col.gameObject.tag == "Urchin" && health_image.sprite == health_sprite_2) {
 
               health_image.sprite = health_sprite_3;
           }
@@ -55,7 +56,6 @@ public class InGameUIController : MonoBehaviour
         if (Input.GetMouseButton(0)) {
 
           // Update .png images here!
-          pass
         }
     }
 }
