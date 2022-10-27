@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     float staminaDrainRate;
     float sprintMultplier;
 
+    // Time check
+    public float timer = 1.5f;
+
     void Awake()
     {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
@@ -78,12 +81,45 @@ public class PlayerController : MonoBehaviour
             // health -= enemy.GetAttack();
             if (health <= 0) Die();
         }
-    }
-
-    private void OnTriggerStay2D(Collider2D other) {
         
+        if (otherObj.GetComponent<InstantTrap>())
+        {
+            InstantTrap trap = otherObj.GetComponent<InstantTrap>();
+            health -= trap.GetDamage();
+            if (health <= 0) Die();
+        }
     }
 
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.GetComponent<PoisonTrap>())
+        {
+            PoisonTrap trap = otherObj.GetComponent<PoisonTrap>();
+            health -= trap.GetDamage();
+            if (health <= 0) Die();
+        }
+        if (otherObj.GetComponent<TriggerTrap>())
+        {
+            TriggerTrap trap = otherObj.GetComponent<TriggerTrap>();
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                health -= trap.GetDamage();
+                timer = 1.5f;
+            }
+            if (health <= 0) Die();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.GetComponent<TriggerTrap>())
+        {
+            timer = 1.5f;
+        }
+    }
     /// <summary>
     /// Handles logic after player death.
     /// </summary>
