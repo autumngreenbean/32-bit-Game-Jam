@@ -5,18 +5,16 @@ using UnityEngine;
 public class InGameUIController : MonoBehaviour
 {
 
-    // Function for health UI
-
-    public void healthUI() {
+    // Collision function for the health UI
+    void OnCollisionEnter() {
 
 
     }
 
     // Function for stamina UI
-
     public void staminaUI() {
 
-      
+
     }
 
 }

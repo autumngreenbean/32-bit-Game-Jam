@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     // Store references to these class instances
     GameController gameController;
     WorldController worldController;
+    InGameUIController gameUIController;
 
     // Checkpoint
     private Checkpoint lastCheckpoint = null;
@@ -35,8 +36,10 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        worldController = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldController>();
+        GameObject engineObj = GameObject.FindGameObjectWithTag("GameController");
+        gameController = engineObj.GetComponent<GameController>();
+        worldController = engineObj.GetComponent<WorldController>();
+        gameUIController = engineObj.GetComponent<InGameUIController>();
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -79,6 +82,7 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
             // health -= enemy.GetAttack();
+            gameUIController.UpdateHealth(health);
             if (health <= 0) Die();
         }
         
