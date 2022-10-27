@@ -37,14 +37,14 @@ public class InGameUIController : MonoBehaviour
 
       void OnCollisionEnter(Collision col) {
 
-          if (col.gameObject.tag == "Urchin" & image.sprite = health_sprite_1) {
+          if (col.gameObject.tag == "Urchin" & health_image.sprite = health_sprite_1) {
 
-              image.sprite = health_sprite_2;
+              health_image.sprite = health_sprite_2;
           }
 
-          if (col.gameObject.tag == "Urchin" & image.sprite = health_sprite_2) {
+          if (col.gameObject.tag == "Urchin" & health_image.sprite = health_sprite_2) {
 
-              image.sprite = health_sprite_3;
+              health_image.sprite = health_sprite_3;
           }
       }
   }
