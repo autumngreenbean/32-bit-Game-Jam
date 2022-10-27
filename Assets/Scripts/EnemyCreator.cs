@@ -27,7 +27,7 @@ public class EnemyCreator : MonoBehaviour
             timer = 10;
             //Debug.Log(Enemy.name);
             Vector3 EnemyNest= player.transform.position;
-            EnemyNest.x -= 15;
+            EnemyNest.x += 27;
             GameObject enemyObj = Instantiate(new_enemy, EnemyNest, Quaternion.identity);
             enemyObj.AddComponent<EnemyController>();
             enemyObj.transform.parent = EnemyFather.transform;
