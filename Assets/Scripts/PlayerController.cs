@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         HandleStamina();
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         GameObject otherObj = other.gameObject;
         if (otherObj.GetComponent<Checkpoint>())
         {
@@ -78,6 +78,10 @@ public class PlayerController : MonoBehaviour
             // health -= enemy.GetAttack();
             if (health <= 0) Die();
         }
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        
     }
 
     /// <summary>
