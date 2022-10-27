@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class InGameUIController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    // Function for health UI
+
+    public void healthUI() {
+
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    // Function for stamina UI
+
+    public void staminaUI() {
+
+      
     }
+
 }
