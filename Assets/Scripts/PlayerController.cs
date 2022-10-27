@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
             // health -= enemy.GetAttack();
-            gameUIController.UpdateHealth(health);
+            // gameUIController.UpdateHealth(health);
             if (health <= 0) Die();
         }
     }
