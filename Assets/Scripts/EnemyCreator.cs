@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class EnemyCreator : MonoBehaviour
 {
-    public GameObject m_enemy;
+    public GameObject new_enemy;
     public float timer = 0;
-    public GameObject Enemy;
+    public GameObject player;
+    public GameObject EnemyFather;
     // Start is called before the first frame update
     void Start()
     {
-        Enemy = GameObject.FindGameObjectWithTag("Enemy");
+        
+        player = GameObject.FindGameObjectWithTag("Player");
+        EnemyFather = GameObject.FindGameObjectWithTag("EnemyNest");
+        timer = 10;
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer % 10 == 0)
+        timer -= Time.deltaTime;
+        //Debug.Log(Enemy.name);
+        if (timer < 0)
         {
-            Instantiate(m_enemy, Enemy.transform);
+            timer = 10;
+            //Debug.Log(Enemy.name);
+            Vector3 EnemyNest= player.transform.position;
+            EnemyNest.x -= 15;
+            GameObject enemyObj = Instantiate(new_enemy, EnemyNest, Quaternion.identity);
+            enemyObj.AddComponent<EnemyController>();
+            enemyObj.transform.parent = EnemyFather.transform;
         }
     }
 }

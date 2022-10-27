@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterDistortion
+  m_Name: L-MainMenuDistortion 1
   m_Shader: {fileID: -6465566751694194690, guid: 043b421859f58432b997092db369b326, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -113,7 +113,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Distortion_Position: {r: 0.1, g: 0.1, b: 0, a: 0}
-    - _Distortion_Tiling: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _Distortion_Tiling: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
