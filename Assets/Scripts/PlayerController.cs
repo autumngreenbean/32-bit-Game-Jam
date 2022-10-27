@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         if (otherObj.GetComponent<EnemyController>())
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
-            // health -= enemy.GetAttack();
+            health -= enemy.getDamage();
             gameUIController.UpdateHealth(health);
             if (health <= 0) Die();
         }
