@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     // Store references to these class instances
     GameController gameController;
     WorldController worldController;
+    InGameUIController gameUIController;
 
     // Checkpoint
     private Checkpoint lastCheckpoint = null;
@@ -30,10 +31,15 @@ public class PlayerController : MonoBehaviour
     float staminaDrainRate;
     float sprintMultplier;
 
+    // Time check
+    public float timer = 1.5f;
+
     void Awake()
     {
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        worldController = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldController>();
+        GameObject engineObj = GameObject.FindGameObjectWithTag("GameController");
+        gameController = engineObj.GetComponent<GameController>();
+        worldController = engineObj.GetComponent<WorldController>();
+        gameUIController = engineObj.GetComponent<InGameUIController>();
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -76,14 +82,48 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
             // health -= enemy.GetAttack();
+            gameUIController.UpdateHealth(health);
+            if (health <= 0) Die();
+        }
+        
+        if (otherObj.GetComponent<InstantTrap>())
+        {
+            InstantTrap trap = otherObj.GetComponent<InstantTrap>();
+            health -= trap.GetDamage();
             if (health <= 0) Die();
         }
     }
 
-    private void OnTriggerStay2D(Collider2D other) {
-        
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.GetComponent<PoisonTrap>())
+        {
+            PoisonTrap trap = otherObj.GetComponent<PoisonTrap>();
+            health -= trap.GetDamage();
+            if (health <= 0) Die();
+        }
+        if (otherObj.GetComponent<TriggerTrap>())
+        {
+            TriggerTrap trap = otherObj.GetComponent<TriggerTrap>();
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                health -= trap.GetDamage();
+                timer = 1.5f;
+            }
+            if (health <= 0) Die();
+        }
     }
 
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        GameObject otherObj = other.gameObject;
+        if (otherObj.GetComponent<TriggerTrap>())
+        {
+            timer = 1.5f;
+        }
+    }
     /// <summary>
     /// Handles logic after player death.
     /// </summary>

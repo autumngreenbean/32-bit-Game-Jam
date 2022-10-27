@@ -5,12 +5,12 @@ using TMPro;
 
 public class ExitText : MonoBehaviour
 {
-    TextMeshPro guiText;
-    float speed = 5.0f;
+    TextMeshProUGUI guiText;
+    float speed = 0.5f;
 
     void Start() 
     {
-        guiText = gameObject.GetComponent<TextMeshPro>();    
+        guiText = gameObject.GetComponent<TextMeshProUGUI>();    
     }
     void Update() {
 
