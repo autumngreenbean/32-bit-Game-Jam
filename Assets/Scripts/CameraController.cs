@@ -36,4 +36,9 @@ public class CameraController : MonoBehaviour
         float playerFactor = Utilities.Map(playerScreenX, 0, Camera.main.pixelWidth, minPlayerMultiplier, maxPlayerMultiplier);
         return baseSpeed * playerFactor;
     }
+
+    public void ResetLocation(float xValue)
+    {
+        t.position = new Vector3(xValue, t.position.y, t.position.z);
+    }
 }

@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Holds player state information and logic.
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
+    // Store references to these class instances
     GameController gameController;
     WorldController worldController;
 
@@ -72,16 +76,28 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
             // health -= enemy.GetAttack();
-            if (health <= 0) OnDeath();
+            if (health <= 0) Die();
         }
     }
 
-    private void OnDeath()
+    /// <summary>
+    /// Handles logic after player death.
+    /// </summary>
+    private void Die()
     {
+        // If we have activated a checkpoint, reset the camera there.
+        if (lastCheckpoint is not null)
+        {
+            worldController.ResetCameraLocation(lastCheckpoint.GetLocation().x);
+        }
+        else worldController.ResetCameraLocation(worldController.GetCameraStartingLocation().x);
         ResetStats();
         Respawn();
     }
 
+    /// <summary>
+    /// Resets player location based on the last activated checkpoint, or the default starting location
+    /// </summary>
     private void Respawn()
     {
         if (lastCheckpoint is null) SetLocation(worldController.GetPlayerStartingLocation());

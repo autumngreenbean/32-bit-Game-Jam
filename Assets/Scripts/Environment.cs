@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    [SerializeField] WorldController.EnviromentLayers layer; 
+    [SerializeField] WorldController.EnvironmentLayers layer; 
 
     private void Awake() {
 
