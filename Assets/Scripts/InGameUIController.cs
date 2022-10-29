@@ -24,6 +24,7 @@ public class InGameUIController : MonoBehaviour
   public Sprite stamina_sprite_3;
 
   void Start() {
+      Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow, 60); 
 
       health_image = GetComponent<Image>();
 

@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class TriggerTrap : MonoBehaviour
 {
-    int damage = 40;
+    // int damage = 40;
+    bool triggered = false;
 
-    public int GetDamage()
+    // public int GetDamage()
+    // {
+    //     return damage;
+    // }
+
+    public void Trigger()
     {
-        return damage;
+        triggered = true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void Untrigger()
     {
-        
+        triggered = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool IsTriggered()
     {
-        
+        if (triggered) return true;
+        return false;
     }
 }

@@ -15,7 +15,6 @@ public class ExitText : MonoBehaviour
     void Update() {
 
         guiText.alpha = Mathf.PingPong(Time.time * speed, 1.0f);
-        // guiText.color.a = Mathf.PingPong(Time.time * speed, 1.0);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

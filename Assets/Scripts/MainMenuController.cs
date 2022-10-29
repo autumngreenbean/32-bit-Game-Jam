@@ -5,8 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    public void PlayGame() {
+  private void Start() {
+    Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow, 60); 
+  }
 
+    public void PlayGame()
+    {
       SceneManager.LoadScene("GameScene");
     }
 

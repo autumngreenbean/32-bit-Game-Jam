@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Store references to these class instances
-    GameController gameController;
+    [SerializeField] GameController gameController;
     WorldController worldController;
     InGameUIController gameUIController;
 
@@ -16,56 +16,89 @@ public class PlayerController : MonoBehaviour
     private Checkpoint lastCheckpoint = null;
     
     // Movement
+    [SerializeField] Transform followPoint;
     Rigidbody2D rb;
-    Vector3 mousePosition;
-    Vector3 direction;
-    float move;
-    float baseSpeed;
-    float speed;
+    Vector3 move = Vector3.zero;
     bool sprinting = false;
+    bool canMove = false;
 
     // Stats
+    float baseSpeed;
+    float maxMoveDistance;
     int health;
     float stamina;
     float staminaRechargeRate;
     float staminaDrainRate;
     float sprintMultplier;
+    float distanceMultiplier;
 
-    // Time check
-    public float timer = 1.5f;
-
-    void Awake()
-    {
-        GameObject engineObj = GameObject.FindGameObjectWithTag("GameController");
-        gameController = engineObj.GetComponent<GameController>();
-        worldController = engineObj.GetComponent<WorldController>();
-        gameUIController = engineObj.GetComponent<InGameUIController>();
+    // Trap
+    float trapTimer;
+    float poisonTick;
+    
+    void Start() {
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        worldController = gameController.GetWorldController();
+        // gameUIController = gameController.GetGameUIController();
 
         rb = GetComponent<Rigidbody2D>();
-    }
 
-    void Start() {
+        canMove = false;
+
         // Set stats
-        baseSpeed = gameController.GetPlayerSpeed();
+        baseSpeed = gameController.GetPlayerBaseSpeed();
+        maxMoveDistance = gameController.GetPlayerMaxMoveDistance();
         sprintMultplier = gameController.GetPlayerSprintMultiplier();
+        distanceMultiplier = gameController.GetPlayerDistanceMultiplier();
         staminaRechargeRate = gameController.GetPlayerStaminaRechargeRate();
         staminaDrainRate = gameController.GetPlayerStaminaDrainRate();
         ResetStats(); // health and stamina
 
         // Initial movement
         rb.MovePosition(worldController.GetPlayerStartingLocation());
+
+        // Hide cursor
+        Cursor.visible = false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition = new Vector3(mousePosition.x, mousePosition.y, transform.position.z);
-        direction = (mousePosition - transform.position).normalized;
-        speed = GetCurrentSpeed() * Vector3.Distance(mousePosition, transform.position) * Time.deltaTime;
-        rb.MovePosition(transform.position + (direction * speed));
+        UpdateFollowPosition();
         HandleStamina();
     }
+
+    private void FixedUpdate()
+    {
+        rb.AddForce(move * GetCurrentSpeed());
+    }
+
+    private void UpdateFollowPosition()
+    {
+        // If we can't move, dont do anything
+        if (!canMove) return;
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        followPoint.position = new Vector3(mousePosition.x, mousePosition.y, followPoint.position.z);
+        mousePosition = new Vector3(mousePosition.x - 1f, mousePosition.y, 0);
+
+        // get difference from mouse (with distance multiplier and max magnitude)
+        move = Vector2.ClampMagnitude((mousePosition - transform.position) * distanceMultiplier, maxMoveDistance);
+    }
+    private float GetCurrentSpeed()
+    {
+        float speed = baseSpeed;
+        if (Input.GetMouseButton(0) && CanSprint()) 
+        {
+            sprinting = true;
+            speed *= sprintMultplier;
+        }
+        else sprinting = false;
+
+        return speed * Time.fixedDeltaTime;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other) {
         GameObject otherObj = other.gameObject;
@@ -78,19 +111,21 @@ public class PlayerController : MonoBehaviour
                 point.Activate();
             }
         }
-        if (otherObj.GetComponent<EnemyController>())
+        else if (otherObj.GetComponent<EnemyController>())
         {
             EnemyController enemy = otherObj.GetComponent<EnemyController>();
-            health -= enemy.getDamage();
-            // gameUIController.UpdateHealth(health);
-            if (health <= 0) Die();
+            TakeDamage();
         }
-        
-        if (otherObj.GetComponent<InstantTrap>())
+        else if (otherObj.GetComponent<InstantTrap>())
         {
             InstantTrap trap = otherObj.GetComponent<InstantTrap>();
-            health -= trap.GetDamage();
-            if (health <= 0) Die();
+            TakeDamage();
+        }
+        else if (otherObj.GetComponent<TriggerTrap>())
+        {
+            TriggerTrap trap = otherObj.GetComponent<TriggerTrap>();
+            if (trap.IsTriggered()) return;
+            trapTimer = gameController.GetTriggerTrapTimer();
         }
     }
 
@@ -100,19 +135,18 @@ public class PlayerController : MonoBehaviour
         if (otherObj.GetComponent<PoisonTrap>())
         {
             PoisonTrap trap = otherObj.GetComponent<PoisonTrap>();
-            health -= trap.GetDamage();
-            if (health <= 0) Die();
+            poisonTick -= Time.deltaTime;
+            if (poisonTick <= 0)
+            {
+                poisonTick = gameController.GetPoisonTickTimer(); 
+                TakeDamage();
+            }
         }
-        if (otherObj.GetComponent<TriggerTrap>())
+        else if (otherObj.GetComponent<TriggerTrap>())
         {
             TriggerTrap trap = otherObj.GetComponent<TriggerTrap>();
-            timer -= Time.deltaTime;
-            if (timer < 0)
-            {
-                health -= trap.GetDamage();
-                timer = 1.5f;
-            }
-            if (health <= 0) Die();
+            trapTimer -= Time.deltaTime;
+            if (trapTimer <= 0) TakeDamage();
         }
     }
 
@@ -121,9 +155,21 @@ public class PlayerController : MonoBehaviour
         GameObject otherObj = other.gameObject;
         if (otherObj.GetComponent<TriggerTrap>())
         {
-            timer = 1.5f;
+            TriggerTrap trap = otherObj.GetComponent<TriggerTrap>();
+            trap.Untrigger();
+            trapTimer = gameController.GetTriggerTrapTimer();
+        }
+        else if (otherObj.GetComponent<PoisonTrap>())
+        {
+            poisonTick = gameController.GetPoisonTickTimer();
         }
     }
+
+    public void EnableMovement()
+    {
+        canMove = true;
+    }
+
     /// <summary>
     /// Handles logic after player death.
     /// </summary>
@@ -168,20 +214,6 @@ public class PlayerController : MonoBehaviour
         rb.position = location;
     }
 
-    private float GetCurrentSpeed()
-    {
-        if (Input.GetMouseButton(0) && CanSprint()) 
-        {
-            sprinting = true;
-            return baseSpeed * sprintMultplier;
-        }
-        else
-        {
-            sprinting = false;
-            return baseSpeed;
-        }
-    }
-
     private void HandleStamina()
     {
         if (sprinting && stamina > 0) stamina -= (staminaDrainRate * Time.deltaTime);
@@ -192,5 +224,12 @@ public class PlayerController : MonoBehaviour
     {
         if (stamina > 0) return true;
         return false;
+    }
+
+    private void TakeDamage()
+    {
+        health -= 1;
+        // gameUIController.UpdateHealth(health);
+        if (health <= 0) Die();
     }
 }

@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class InstantTrap : MonoBehaviour
 {
-    int damage = 10;
+    // int damage = 10;
+    // bool triggered = false;
 
-    public int GetDamage()
-    {
-        return damage;
-    }
+    // public int GetDamage()
+    // {
+    //     return damage;
+    // }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // public void Trigger()
+    // {
+    //     triggered = true;
+    // }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // public bool isTriggered()
+    // {
+    //     if (triggered) return true;
+    //     return false;
+    // }
 }

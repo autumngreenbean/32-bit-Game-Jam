@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    GameController gameController;
+    [SerializeField] GameController gameController;
     WorldController worldController;
 
     Transform t;
@@ -12,10 +12,10 @@ public class CameraController : MonoBehaviour
     float baseSpeed;
     float minPlayerMultiplier;
     float maxPlayerMultiplier;
+    bool canMove = false;
 
-    private void Awake() {
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        worldController = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldController>();
+    private void Start() {
+        worldController = gameController.GetWorldController();
 
         t = gameObject.transform;
 
@@ -24,10 +24,20 @@ public class CameraController : MonoBehaviour
         maxPlayerMultiplier = gameController.GetCameraMaxPlayerMultipier();
 
         t.position = worldController.GetCameraStartingLocation();
+
+        canMove = false;
     }
 
     private void Update() {
-        t.Translate(Vector3.right * GetCameraSpeed() * Time.deltaTime, Space.World);
+        if (canMove)
+        {
+            t.Translate(Vector3.right * GetCameraSpeed() * Time.deltaTime, Space.World);
+        }
+    }
+
+    public void EnableMovement()
+    {
+        canMove = true;
     }
 
     private float GetCameraSpeed()

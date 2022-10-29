@@ -11,8 +11,9 @@ public class WorldController : MonoBehaviour
     public static WorldController instance { get; private set; }
 
     // Store references to these class instances
-    PlayerController player;
-    CameraController cam;
+    [SerializeField] GameController gameController;
+    PlayerController playerController;
+    CameraController cameraController;
 
     // Default starting locations
     [SerializeField] Vector3 playerStartingLocation = new Vector3(0, 0, 0);
@@ -23,6 +24,12 @@ public class WorldController : MonoBehaviour
     [SerializeField] float midgroundZ = 0;
     [SerializeField] float backgroundZ = 0;
     [SerializeField] float backbackgroundZ = 0;
+
+
+    // Starting/Current Environment tiles
+    [SerializeField] Environment env1;
+    [SerializeField] Environment env2;
+    [SerializeField] Environment env3;
 
     /// <summary>
     /// Enumeration of different enviroment layers used to set z-position.
@@ -41,9 +48,13 @@ public class WorldController : MonoBehaviour
             Debug.LogError("Found more than one Game Controller in the scene.");
         }
         instance = this;
+    }
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
+    private void Start()
+    {
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        playerController = gameController.GetPlayerController();
+        cameraController = gameController.GetCameraController();
     }
 
     /// <summary>
@@ -75,7 +86,7 @@ public class WorldController : MonoBehaviour
     /// </summary>
     public Vector3 GetPlayerLocation()
     {
-        return player.GetLocation();
+        return playerController.GetLocation();
     }
 
     /// <summary>
@@ -91,6 +102,6 @@ public class WorldController : MonoBehaviour
     /// </summary>
     public void ResetCameraLocation(float xValue)
     {
-        cam.ResetLocation(xValue);
+        cameraController.ResetLocation(xValue);
     }
 }

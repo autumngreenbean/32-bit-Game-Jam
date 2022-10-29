@@ -11,20 +11,35 @@ public class GameController : MonoBehaviour
     public static GameController instance { get; private set; }
     
     // Store references to these class instances
-    public WorldController worldController;
+    [SerializeField] WorldController worldController;
+    [SerializeField] PlayerController playerController;
+    [SerializeField] CameraController cameraController;
+    [SerializeField] InGameUIController gameUIController;
+
+    // Game Stats
+    [Header("Game Settings")]
+    [SerializeField] float timeToStart = 5.0f;
+
+    // Camera default stats
+    [Header("Camera Settings")]
+    [SerializeField] float cameraBaseSpeed = 0.1f;
+    [SerializeField] float cameraPlayerMinMultiplier = 0.2f;
+    [SerializeField] float cameraPlayerMaxMultiplier = 1.2f;
 
     // Player default stats
+    [Header("Player Settings")]
     [SerializeField] int playerMaxHealth = 100;
     [SerializeField] float playerBaseSpeed = 0.1f;
+    [SerializeField] float playerMaxMoveDistance = 3.0f;
     [SerializeField] float playerSprintMultiplier = 0.1f;
+    [SerializeField] float playerDistanceMultiplier = 0.1f;
     [SerializeField] float playerMaxStamina = 100f;
     [SerializeField] float playerStaminaDrainRate = 1f;
     [SerializeField] float playerStaminaRechargeRate = 1f;
 
-    // Camera default stats
-    [SerializeField] float cameraBaseSpeed = 0.1f;
-    [SerializeField] float cameraPlayerMinMultiplier = 0.2f;
-    [SerializeField] float cameraPlayerMaxMultiplier = 1.2f;
+    [Header("Enemy Settings")]
+    [SerializeField] float triggerTrapTimer = 1.5f;
+    [SerializeField] float poisonTrapTickTimer = 0.5f;
 
     private void Awake()
     {
@@ -33,16 +48,55 @@ public class GameController : MonoBehaviour
             Debug.LogError("Found more than one Game Controller in the scene.");
         }
         instance = this;
+    }
+
+    private void Start() {
         
-        worldController = gameObject.GetComponent<WorldController>();
+        StartCoroutine(StartGame());
+    }
+
+    public WorldController GetWorldController()
+    {
+        return worldController;
+    }
+
+    public PlayerController GetPlayerController()
+    {
+        return playerController;
+    }
+
+    public CameraController GetCameraController()
+    {
+        return cameraController;
+    }
+
+    public InGameUIController GetGameUIController()
+    {
+        return gameUIController;
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(timeToStart);
+
+        playerController.EnableMovement();
+        cameraController.EnableMovement();
     }
 
     /// <summary>
     /// Returns the default player speed.
     /// </summary>
-    public float GetPlayerSpeed()
+    public float GetPlayerBaseSpeed()
     {
         return playerBaseSpeed;
+    }
+
+    /// <summary>
+    /// Returns the max player speed.
+    /// </summary>
+    public float GetPlayerMaxMoveDistance()
+    {
+        return playerMaxMoveDistance;
     }
 
     /// <summary>
@@ -59,6 +113,14 @@ public class GameController : MonoBehaviour
     public float GetPlayerSprintMultiplier()
     {
         return playerSprintMultiplier;
+    }
+
+    /// <summary>
+    /// Returns the player mouse distance speed multiplier.
+    /// </summary>
+    public float GetPlayerDistanceMultiplier()
+    {
+        return playerDistanceMultiplier;
     }
 
     /// <summary>
@@ -107,5 +169,21 @@ public class GameController : MonoBehaviour
     public float GetPlayerStaminaDrainRate()
     {
         return playerStaminaDrainRate;
+    }
+
+    /// <summary>
+    /// Returns the trigger trap timer.
+    /// </summary>
+    public float GetTriggerTrapTimer()
+    {
+        return triggerTrapTimer;
+    }
+
+    /// <summary>
+    /// Returns the time between poison damage
+    /// </summary>
+    public float GetPoisonTickTimer()
+    {
+        return triggerTrapTimer;
     }
 }
