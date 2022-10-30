@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     void Start() {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         worldController = gameController.GetWorldController();
-        // gameUIController = gameController.GetGameUIController();
+        gameUIController = gameController.GetGameUIController();
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -60,6 +60,8 @@ public class PlayerController : MonoBehaviour
         // Hide cursor
         Cursor.visible = false;
 
+        gameUIController.UpdateHealthUI(health);
+        gameUIController.UpdateStaminaUI(stamina);
     }
 
     // Update is called once per frame
@@ -182,6 +184,7 @@ public class PlayerController : MonoBehaviour
         }
         else worldController.ResetCameraLocation(worldController.GetCameraStartingLocation().x);
         ResetStats();
+        gameUIController.UpdateHealthUI(health);
         Respawn();
     }
 
@@ -218,6 +221,7 @@ public class PlayerController : MonoBehaviour
     {
         if (sprinting && stamina > 0) stamina -= (staminaDrainRate * Time.deltaTime);
         else if (stamina < 100) stamina += (staminaRechargeRate * Time.deltaTime);
+        gameUIController.UpdateStaminaUI(stamina);
     }
 
     private bool CanSprint()
@@ -229,7 +233,7 @@ public class PlayerController : MonoBehaviour
     private void TakeDamage()
     {
         health -= 1;
-        // gameUIController.UpdateHealth(health);
+        gameUIController.UpdateHealthUI(health);
         if (health <= 0) Die();
     }
 }
