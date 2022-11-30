@@ -6,7 +6,7 @@ using TMPro;
 public class ExitText : MonoBehaviour
 {
     TextMeshProUGUI guiText;
-    float speed = 0.75f;
+    public float speed = 1.0f;
 
     void Start() 
     {
